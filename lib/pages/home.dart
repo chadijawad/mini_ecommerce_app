@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mini_ecommerce_app/classes/items.dart';
 import 'package:mini_ecommerce_app/constant/colors.dart';
+import 'package:mini_ecommerce_app/pages/details.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -10,16 +11,6 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  final List<Item> items = [
-    Item(price: 12.99, imgPath: "assets/2.webp"),
-    Item(price: 12.99, imgPath: "assets/3.webp"),
-    Item(price: 12.99, imgPath: "assets/4.webp"),
-    Item(price: 12.99, imgPath: "assets/5.webp"),
-    Item(price: 12.99, imgPath: "assets/6.webp"),
-    Item(price: 12.99, imgPath: "assets/7.webp"),
-    Item(price: 12.99, imgPath: "assets/8.webp"),
-    Item(price: 12.99, imgPath: "assets/1.webp"),
-  ];
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -43,14 +34,22 @@ class _HomeState extends State<Home> {
                         icon: const Icon(Icons.add)),
                     leading: Container(
                       margin: const EdgeInsets.only(left: 22),
-                      child:  Text("\$ ${items[index].price.toString()}"),
+                      child: Text("\$ ${items[index].price.toString()}"),
                     ),
                     title: const Text(
                       "",
                     ),
                   ),
                   child: GestureDetector(
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => Details(
+                            item: items[index],
+                          ),
+                        ),
+                      );
+                    },
                     // use ClipRRect & Positioned
                     child: Stack(
                       children: [

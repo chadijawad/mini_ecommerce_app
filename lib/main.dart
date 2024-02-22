@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mini_ecommerce_app/pages/details.dart';
 import 'package:mini_ecommerce_app/pages/home.dart';
 import 'package:mini_ecommerce_app/pages/login.dart';
 import 'package:mini_ecommerce_app/pages/register.dart';

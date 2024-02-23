@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:mini_ecommerce_app/classes/items.dart';
 import 'package:mini_ecommerce_app/constant/colors.dart';
 import 'package:mini_ecommerce_app/pages/details.dart';
+import 'package:mini_ecommerce_app/provider/cart.dart';
+import 'package:provider/provider.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -28,10 +30,14 @@ class _HomeState extends State<Home> {
                 return GridTile(
                   footer: GridTileBar(
                     // backgroundColor: const Color.fromARGB(66, 73, 127, 110),
-                    trailing: IconButton(
-                        color: const Color.fromARGB(255, 62, 94, 70),
-                        onPressed: () {},
-                        icon: const Icon(Icons.add)),
+                    trailing: Consumer<Cart>(builder: (context, cart, child) {
+                      return IconButton(
+                          color: const Color.fromARGB(255, 62, 94, 70),
+                          onPressed: () {
+                            cart.addToCart(items[index]);
+                          },
+                          icon: const Icon(Icons.add));
+                    }),
                     leading: Container(
                       margin: const EdgeInsets.only(left: 22),
                       child: Text("\$ ${items[index].price.toString()}"),
@@ -120,32 +126,37 @@ class _HomeState extends State<Home> {
           backgroundColor: appbarGreen,
           title: const Text("Home"),
           actions: [
-            Row(
-              children: [
-                Stack(
+            Consumer<Cart>(
+              builder: (context, cart, child) {
+                return Row(
                   children: [
-                    Container(
-                      padding: const EdgeInsets.all(5),
-                      decoration: const BoxDecoration(
-                          color: Color.fromARGB(211, 164, 255, 193),
-                          shape: BoxShape.circle),
-                      child: const Text(
-                        "8",
-                        style: TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
-                      ),
+                    Stack(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.all(5),
+                          decoration: const BoxDecoration(
+                              color: Color.fromARGB(211, 164, 255, 193),
+                              shape: BoxShape.circle),
+                          child: Text(
+                            "${cart.selectedItems.length}",
+                            style: const TextStyle(
+                                color: Color.fromARGB(255, 0, 0, 0)),
+                          ),
+                        ),
+                        IconButton(
+                          onPressed: () {},
+                          icon: const Icon(Icons.add_shopping_cart),
+                        ),
+                      ],
                     ),
-                    IconButton(
-                      onPressed: () {},
-                      icon: const Icon(Icons.add_shopping_cart),
-                    ),
+                     Padding(
+                      padding: const EdgeInsets.only(right: 12),
+                      child: Text("\$ ${cart.price}"),
+                    )
                   ],
-                ),
-                const Padding(
-                  padding: EdgeInsets.only(right: 12),
-                  child: Text("\$ 128"),
-                )
-              ],
-            )
+                );
+              },
+            ),
           ],
         ),
       ),

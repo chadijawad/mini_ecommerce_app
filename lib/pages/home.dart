@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:mini_ecommerce_app/classes/items.dart';
+import 'package:mini_ecommerce_app/constant/appbar.dart';
 import 'package:mini_ecommerce_app/constant/colors.dart';
+import 'package:mini_ecommerce_app/pages/checkout.dart';
 import 'package:mini_ecommerce_app/pages/details.dart';
 import 'package:mini_ecommerce_app/provider/cart.dart';
 import 'package:provider/provider.dart';
@@ -15,6 +17,7 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
+    final cart = Provider.of<Cart>(context);
     return SafeArea(
       child: Scaffold(
         body: Padding(
@@ -30,14 +33,12 @@ class _HomeState extends State<Home> {
                 return GridTile(
                   footer: GridTileBar(
                     // backgroundColor: const Color.fromARGB(66, 73, 127, 110),
-                    trailing: Consumer<Cart>(builder: (context, cart, child) {
-                      return IconButton(
-                          color: const Color.fromARGB(255, 62, 94, 70),
-                          onPressed: () {
-                            cart.addToCart(items[index]);
-                          },
-                          icon: const Icon(Icons.add));
-                    }),
+                    trailing: IconButton(
+                        color: const Color.fromARGB(255, 62, 94, 70),
+                        onPressed: () {
+                          cart.addToCart(items[index]);
+                        },
+                        icon: const Icon(Icons.add)),
                     leading: Container(
                       margin: const EdgeInsets.only(left: 22),
                       child: Text("\$ ${items[index].price.toString()}"),
@@ -101,11 +102,23 @@ class _HomeState extends State<Home> {
               ListTile(
                   title: const Text("Home"),
                   leading: const Icon(Icons.home),
-                  onTap: () {}),
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => const Home(),
+                      ),
+                    );
+                  }),
               ListTile(
                   title: const Text("My products"),
                   leading: const Icon(Icons.add_shopping_cart),
-                  onTap: () {}),
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => const CheckOut(),
+                      ),
+                    );
+                  }),
               ListTile(
                   title: const Text("About"),
                   leading: const Icon(Icons.help_center),
@@ -125,38 +138,8 @@ class _HomeState extends State<Home> {
         appBar: AppBar(
           backgroundColor: appbarGreen,
           title: const Text("Home"),
-          actions: [
-            Consumer<Cart>(
-              builder: (context, cart, child) {
-                return Row(
-                  children: [
-                    Stack(
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.all(5),
-                          decoration: const BoxDecoration(
-                              color: Color.fromARGB(211, 164, 255, 193),
-                              shape: BoxShape.circle),
-                          child: Text(
-                            "${cart.selectedItems.length}",
-                            style: const TextStyle(
-                                color: Color.fromARGB(255, 0, 0, 0)),
-                          ),
-                        ),
-                        IconButton(
-                          onPressed: () {},
-                          icon: const Icon(Icons.add_shopping_cart),
-                        ),
-                      ],
-                    ),
-                     Padding(
-                      padding: const EdgeInsets.only(right: 12),
-                      child: Text("\$ ${cart.price}"),
-                    )
-                  ],
-                );
-              },
-            ),
+          actions: const [
+            MyAppBar(),
           ],
         ),
       ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mini_ecommerce_app/classes/items.dart';
+import 'package:mini_ecommerce_app/constant/appbar.dart';
 import 'package:mini_ecommerce_app/constant/colors.dart';
 
 class Details extends StatefulWidget {
@@ -20,33 +21,8 @@ class _DetailsState extends State<Details> {
         appBar: AppBar(
           backgroundColor: appbarGreen,
           title: const Text("Details"),
-          actions: [
-            Row(
-              children: [
-                Stack(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.all(5),
-                      decoration: const BoxDecoration(
-                          color: Color.fromARGB(211, 164, 255, 193),
-                          shape: BoxShape.circle),
-                      child: const Text(
-                        "8",
-                        style: TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
-                      ),
-                    ),
-                    IconButton(
-                      onPressed: () {},
-                      icon: const Icon(Icons.add_shopping_cart),
-                    ),
-                  ],
-                ),
-                const Padding(
-                  padding:  EdgeInsets.only(right: 12),
-                  child: Text("\$ 12.99}"),
-                )
-              ],
-            )
+          actions: const [
+            MyAppBar()
           ],
         ),
         body: SingleChildScrollView(

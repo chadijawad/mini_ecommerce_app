@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 
 class TextFieldInput extends StatelessWidget {
+  final TextEditingController myController;
   final String text;
   final bool isObscure;
   final TextInputType inpuType;
-  const TextFieldInput({super.key,required this.text,required this.inpuType,required this.isObscure});
+  const TextFieldInput({super.key,required this.text,required this.inpuType,required this.isObscure,required this.myController});
 
   @override
   Widget build(BuildContext context) {
     return TextField(
+      controller:myController ,
       keyboardType:inpuType,
       obscureText: isObscure,
       decoration: InputDecoration(

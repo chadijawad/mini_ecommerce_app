@@ -4,27 +4,31 @@ import 'package:mini_ecommerce_app/constant/textfield.dart';
 import 'package:mini_ecommerce_app/pages/register.dart';
 
 class Login extends StatelessWidget {
-  const Login({super.key});
+ Login({super.key});
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        backgroundColor:const Color.fromARGB(255, 179, 166, 166) ,
+        backgroundColor: const Color.fromARGB(255, 179, 166, 166),
         body: Center(
           child: Padding(
             padding: const EdgeInsets.all(33.0),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const TextFieldInput(
+                 TextFieldInput(
+                  myController: emailController,
                     text: 'Enter Your Email',
                     inpuType: TextInputType.emailAddress,
                     isObscure: false),
                 const SizedBox(
                   height: 33,
                 ),
-                const TextFieldInput(
+                 TextFieldInput(
+                  myController: passwordController,
                     text: 'Enter Your Password',
                     inpuType: TextInputType.emailAddress,
                     isObscure: true),
@@ -55,7 +59,10 @@ class Login extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Text('Do Not Have An Account?',style: TextStyle(fontSize: 18),),
+                    const Text(
+                      'Do Not Have An Account?',
+                      style: TextStyle(fontSize: 18),
+                    ),
                     const SizedBox(
                       width: 5,
                     ),
@@ -63,13 +70,13 @@ class Login extends StatelessWidget {
                       onPressed: () {
                         Navigator.of(context).pushReplacement(
                           MaterialPageRoute(
-                            builder: (context) => const Register(),
+                            builder: (context) => Register(),
                           ),
                         );
                       },
                       child: const Text(
                         'Sign Up',
-                        style: TextStyle(color: Colors.black,fontSize: 18),
+                        style: TextStyle(color: Colors.black, fontSize: 18),
                       ),
                     ),
                   ],

@@ -35,7 +35,7 @@ class CheckOut extends StatelessWidget {
                         const SizedBox(
                           width: 15,
                         ),
-                        Text(cart.selectedItems[index].location)
+                        Text("${cart.selectedItems[index].location}")
                       ],
                     ),
                     leading: CircleAvatar(

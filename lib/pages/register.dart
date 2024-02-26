@@ -1,10 +1,53 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:mini_ecommerce_app/constant/colors.dart';
 import 'package:mini_ecommerce_app/constant/textfield.dart';
 import 'package:mini_ecommerce_app/pages/login.dart';
 
-class Register extends StatelessWidget {
+class Register extends StatefulWidget {
   const Register({super.key});
+
+  @override
+  State<Register> createState() => _RegisterState();
+}
+
+class _RegisterState extends State<Register> {
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+  final usernameController = TextEditingController();
+  bool isloading = false;
+
+  register() async {
+    setState(() {
+      isloading = true;
+    });
+
+    try {
+      final credential =
+          await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: emailController.text,
+        password: passwordController.text,
+      );
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'weak-password') {
+        print('The password provided is too weak.');
+      } else if (e.code == 'email-already-in-use') {
+        print('The account already exists for that email.');
+      }
+    } catch (e) {
+      print(e);
+    }
+      setState(() {
+        isloading = false;
+      });
+  }
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -17,21 +60,24 @@ class Register extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const TextFieldInput(
+                TextFieldInput(
+                    myController: usernameController,
                     text: 'Enter Your Username',
                     inpuType: TextInputType.text,
                     isObscure: false),
                 const SizedBox(
                   height: 33,
                 ),
-                const TextFieldInput(
+                TextFieldInput(
+                    myController: emailController,
                     text: 'Enter Your Email',
                     inpuType: TextInputType.emailAddress,
                     isObscure: false),
                 const SizedBox(
                   height: 33,
                 ),
-                const TextFieldInput(
+                TextFieldInput(
+                    myController: passwordController,
                     text: 'Enter Your Password',
                     inpuType: TextInputType.text,
                     isObscure: true),
@@ -39,7 +85,9 @@ class Register extends StatelessWidget {
                   height: 20,
                 ),
                 ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    register();
+                  },
                   style: ButtonStyle(
                     backgroundColor: const MaterialStatePropertyAll(BTNgreen),
                     padding: MaterialStateProperty.all(
@@ -51,10 +99,14 @@ class Register extends StatelessWidget {
                       ),
                     ),
                   ),
-                  child: const Text(
-                    'Sign in',
-                    style: TextStyle(fontSize: 20, color: Colors.white),
-                  ),
+                  child: isloading
+                      ? const CircularProgressIndicator(
+                          color: Colors.white,
+                        )
+                      : const Text(
+                          'Register',
+                          style: TextStyle(fontSize: 20, color: Colors.white),
+                        ),
                 ),
                 const SizedBox(
                   height: 10,
@@ -73,7 +125,7 @@ class Register extends StatelessWidget {
                       onPressed: () {
                         Navigator.of(context).pushReplacement(
                           MaterialPageRoute(
-                            builder: (context) => const Login(),
+                            builder: (context) => Login(),
                           ),
                         );
                       },

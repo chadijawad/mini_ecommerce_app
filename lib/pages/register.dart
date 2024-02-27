@@ -1,6 +1,8 @@
+import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:mini_ecommerce_app/constant/colors.dart';
+import 'package:mini_ecommerce_app/constant/snackbar.dart';
 import 'package:mini_ecommerce_app/constant/textfield.dart';
 import 'package:mini_ecommerce_app/pages/login.dart';
 
@@ -16,6 +18,8 @@ class _RegisterState extends State<Register> {
   final passwordController = TextEditingController();
   final usernameController = TextEditingController();
   bool isloading = false;
+  final _formKey = GlobalKey<FormState>();
+  bool isObscure = true;
 
   register() async {
     setState(() {
@@ -28,18 +32,23 @@ class _RegisterState extends State<Register> {
         email: emailController.text,
         password: passwordController.text,
       );
+      showSnackBar(context, 'Registration successful!');
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
-        print('The password provided is too weak.');
+        // print('The password provided is too weak.');
+        showSnackBar(context, 'The password provided is too weak.');
       } else if (e.code == 'email-already-in-use') {
-        print('The account already exists for that email.');
+        showSnackBar(context, 'The account already exists for that email.');
+      } else {
+        showSnackBar(context, 'Error-please try again later');
       }
     } catch (e) {
-      print(e);
+      // print(e);
+      showSnackBar(context, '$e\nPlease check your internet connection.');
     }
-      setState(() {
-        isloading = false;
-      });
+    setState(() {
+      isloading = false;
+    });
   }
 
   @override
@@ -60,33 +69,74 @@ class _RegisterState extends State<Register> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                TextFieldInput(
-                    myController: usernameController,
-                    text: 'Enter Your Username',
-                    inpuType: TextInputType.text,
-                    isObscure: false),
-                const SizedBox(
-                  height: 33,
+                Form(
+                  key: _formKey,
+                  child: Column(
+                    children: [
+                      TextFormField(
+                        controller: usernameController,
+                        decoration: decorationTextfield.copyWith(
+                            hintText: 'Enter your username',
+                            suffixIcon: const Icon(Icons.account_box_sharp)),
+                        keyboardType: TextInputType.text,
+                      ),
+                      const SizedBox(
+                        height: 33,
+                      ),
+                      TextFormField(
+                        validator: (value) {
+                          return value != null &&
+                                  !EmailValidator.validate(value)
+                              ? "Enter a valid email"
+                              : null;
+                        },
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                        controller: emailController,
+                        decoration: decorationTextfield.copyWith(
+                            hintText: 'Enter your email',
+                            suffixIcon: const Icon(Icons.email)),
+                        keyboardType: TextInputType.emailAddress,
+                      ),
+                      const SizedBox(
+                        height: 33,
+                      ),
+                      TextFormField(
+                        validator: (value) {
+                          return value!.length < 8
+                              ? "Enter at least 6 characters"
+                              : null;
+                        },
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                        controller: passwordController,
+                        decoration: decorationTextfield.copyWith(
+                          hintText: 'Enter your password',
+                          suffixIcon: IconButton(
+                            onPressed: () {
+                              setState(() {
+                                isObscure = !isObscure;
+                              });
+                            },
+                            icon: Icon(isObscure
+                                ? Icons.visibility
+                                : Icons.visibility_off),
+                          ),
+                        ),
+                        keyboardType: TextInputType.text,
+                        obscureText: isObscure,
+                      ),
+                    ],
+                  ),
                 ),
-                TextFieldInput(
-                    myController: emailController,
-                    text: 'Enter Your Email',
-                    inpuType: TextInputType.emailAddress,
-                    isObscure: false),
-                const SizedBox(
-                  height: 33,
-                ),
-                TextFieldInput(
-                    myController: passwordController,
-                    text: 'Enter Your Password',
-                    inpuType: TextInputType.text,
-                    isObscure: true),
                 const SizedBox(
                   height: 20,
                 ),
                 ElevatedButton(
                   onPressed: () {
-                    register();
+                    if (_formKey.currentState!.validate()) {
+                      register();
+                    } else {
+                      showSnackBar(context, 'Form not validated');
+                    }
                   },
                   style: ButtonStyle(
                     backgroundColor: const MaterialStatePropertyAll(BTNgreen),

@@ -4,9 +4,10 @@ import 'package:mini_ecommerce_app/constant/textfield.dart';
 import 'package:mini_ecommerce_app/pages/register.dart';
 
 class Login extends StatelessWidget {
- Login({super.key});
+  Login({super.key});
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -19,19 +20,18 @@ class Login extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                 TextFieldInput(
-                  myController: emailController,
-                    text: 'Enter Your Email',
-                    inpuType: TextInputType.emailAddress,
-                    isObscure: false),
+              TextField(
+                controller: emailController,
+                decoration: decorationTextfield.copyWith(hintText: 'Enter your Email'),
+                    ),
                 const SizedBox(
                   height: 33,
                 ),
-                 TextFieldInput(
-                  myController: passwordController,
-                    text: 'Enter Your Password',
-                    inpuType: TextInputType.emailAddress,
-                    isObscure: true),
+                TextField(
+                  controller: passwordController,
+                  decoration: decorationTextfield.copyWith(hintText: 'Enter your password'),
+                  obscureText: true,
+                ),
                 const SizedBox(
                   height: 20,
                 ),

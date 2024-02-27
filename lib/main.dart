@@ -1,7 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:mini_ecommerce_app/firebase_options.dart';
-import 'package:mini_ecommerce_app/pages/home.dart';
 import 'package:mini_ecommerce_app/pages/register.dart';
 import 'package:mini_ecommerce_app/provider/cart.dart';
 import 'package:provider/provider.dart';

@@ -1,4 +1,3 @@
-import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:mini_ecommerce_app/constant/colors.dart';
@@ -20,6 +19,35 @@ class _RegisterState extends State<Register> {
   bool isloading = false;
   final _formKey = GlobalKey<FormState>();
   bool isObscure = true;
+  bool isPassword8Charecters = false;
+  bool hasUppercase = false;
+  bool hasDigits = false;
+  bool hasLowercase = false;
+  bool hasSpecialCharacters = false;
+  onPasswordChanges(String password) {
+    setState(() {
+      isPassword8Charecters = false;
+      if (password.contains(RegExp(r'.{8,}'))) {
+        isPassword8Charecters = true;
+      }
+      hasLowercase = false;
+      if (password.contains(RegExp(r'[a-z]'))) {
+        hasLowercase = true;
+      }
+      hasSpecialCharacters = false;
+      if (password.contains(RegExp(r'[!@#$%^&*(),.?":{}|<>]'))) {
+        hasSpecialCharacters = true;
+      }
+      hasDigits = false;
+      if (password.contains(RegExp(r'[0-9]'))) {
+        hasDigits = true;
+      }
+      hasUppercase = false;
+      if (password.contains(RegExp(r'[A-Z]'))) {
+        hasUppercase = true;
+      }
+    });
+  }
 
   register() async {
     setState(() {
@@ -32,7 +60,14 @@ class _RegisterState extends State<Register> {
         email: emailController.text,
         password: passwordController.text,
       );
-      showSnackBar(context, 'Registration successful!');
+      if (!mounted) return;
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => Login(),
+        ),
+      );
+      // showSnackBar(context, 'Registration successful!');
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
         // print('The password provided is too weak.');
@@ -66,127 +101,266 @@ class _RegisterState extends State<Register> {
         body: Center(
           child: Padding(
             padding: const EdgeInsets.all(33.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Form(
-                  key: _formKey,
-                  child: Column(
-                    children: [
-                      TextFormField(
-                        controller: usernameController,
-                        decoration: decorationTextfield.copyWith(
-                            hintText: 'Enter your username',
-                            suffixIcon: const Icon(Icons.account_box_sharp)),
-                        keyboardType: TextInputType.text,
-                      ),
-                      const SizedBox(
-                        height: 33,
-                      ),
-                      TextFormField(
-                        validator: (value) {
-                          return value != null &&
-                                  !EmailValidator.validate(value)
-                              ? "Enter a valid email"
-                              : null;
-                        },
-                        autovalidateMode: AutovalidateMode.onUserInteraction,
-                        controller: emailController,
-                        decoration: decorationTextfield.copyWith(
-                            hintText: 'Enter your email',
-                            suffixIcon: const Icon(Icons.email)),
-                        keyboardType: TextInputType.emailAddress,
-                      ),
-                      const SizedBox(
-                        height: 33,
-                      ),
-                      TextFormField(
-                        validator: (value) {
-                          return value!.length < 8
-                              ? "Enter at least 6 characters"
-                              : null;
-                        },
-                        autovalidateMode: AutovalidateMode.onUserInteraction,
-                        controller: passwordController,
-                        decoration: decorationTextfield.copyWith(
-                          hintText: 'Enter your password',
-                          suffixIcon: IconButton(
-                            onPressed: () {
-                              setState(() {
-                                isObscure = !isObscure;
-                              });
-                            },
-                            icon: Icon(isObscure
-                                ? Icons.visibility
-                                : Icons.visibility_off),
-                          ),
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Form(
+                    key: _formKey,
+                    child: Column(
+                      children: [
+                        TextFormField(
+                          controller: usernameController,
+                          decoration: decorationTextfield.copyWith(
+                              hintText: 'Enter your username',
+                              suffixIcon: const Icon(Icons.account_box_sharp)),
+                          keyboardType: TextInputType.text,
                         ),
-                        keyboardType: TextInputType.text,
-                        obscureText: isObscure,
+                        const SizedBox(
+                          height: 33,
+                        ),
+                        TextFormField(
+                          validator: (email) {
+                            return email!.contains(RegExp(
+                                    r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+"))
+                                ? null
+                                : "Enter a valid email";
+                          },
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
+                          controller: emailController,
+                          decoration: decorationTextfield.copyWith(
+                              hintText: 'Enter your email',
+                              suffixIcon: const Icon(Icons.email)),
+                          keyboardType: TextInputType.emailAddress,
+                        ),
+                        const SizedBox(
+                          height: 33,
+                        ),
+                        TextFormField(
+                          onChanged: (value) {
+                            onPasswordChanges(value);
+                          },
+                          validator: (value) {
+                            return value!.length < 8
+                                ? "Enter at least 6 characters"
+                                : null;
+                          },
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
+                          controller: passwordController,
+                          decoration: decorationTextfield.copyWith(
+                            hintText: 'Enter your password',
+                            suffixIcon: IconButton(
+                              onPressed: () {
+                                setState(() {
+                                  isObscure = !isObscure;
+                                });
+                              },
+                              icon: Icon(isObscure
+                                  ? Icons.visibility
+                                  : Icons.visibility_off),
+                            ),
+                          ),
+                          keyboardType: TextInputType.text,
+                          obscureText: isObscure,
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 33,
+                  ),
+                  Row(
+                    children: [
+                      Container(
+                        height: 20,
+                        width: 20,
+                        decoration: BoxDecoration(
+                            color: isPassword8Charecters
+                                ? Colors.green
+                                : Colors.white,
+                            shape: BoxShape.circle,
+                            border: Border.all(
+                                color:
+                                    const Color.fromARGB(255, 189, 189, 189))),
+                        child: const Icon(
+                          Icons.check,
+                          color: Colors.white,
+                          size: 18,
+                        ),
                       ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      const Text('At least 8 characters'),
                     ],
                   ),
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    if (_formKey.currentState!.validate()) {
-                      register();
-                    } else {
-                      showSnackBar(context, 'Form not validated');
-                    }
-                  },
-                  style: ButtonStyle(
-                    backgroundColor: const MaterialStatePropertyAll(BTNgreen),
-                    padding: MaterialStateProperty.all(
-                      const EdgeInsets.all(12),
-                    ),
-                    shape: MaterialStateProperty.all(
-                      RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
+                  const SizedBox(
+                    height: 10,
                   ),
-                  child: isloading
-                      ? const CircularProgressIndicator(
+                  Row(
+                    children: [
+                      Container(
+                        height: 20,
+                        width: 20,
+                        decoration: BoxDecoration(
+                            color: hasDigits ? Colors.green : Colors.white,
+                            shape: BoxShape.circle,
+                            border: Border.all(
+                                color:
+                                    const Color.fromARGB(255, 189, 189, 189))),
+                        child: const Icon(
+                          Icons.check,
                           color: Colors.white,
-                        )
-                      : const Text(
-                          'Register',
-                          style: TextStyle(fontSize: 20, color: Colors.white),
+                          size: 18,
                         ),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Text(
-                      'Already Have An Account?',
-                      style: TextStyle(fontSize: 18),
-                    ),
-                    const SizedBox(
-                      width: 5,
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        Navigator.of(context).pushReplacement(
-                          MaterialPageRoute(
-                            builder: (context) => Login(),
-                          ),
-                        );
-                      },
-                      child: const Text(
-                        'Sign In',
-                        style: TextStyle(color: Colors.black, fontSize: 18),
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      const Text('At least 1 number'),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Row(
+                    children: [
+                      Container(
+                        height: 20,
+                        width: 20,
+                        decoration: BoxDecoration(
+                            color: hasUppercase ? Colors.green : Colors.white,
+                            shape: BoxShape.circle,
+                            border: Border.all(
+                                color:
+                                    const Color.fromARGB(255, 189, 189, 189))),
+                        child: const Icon(
+                          Icons.check,
+                          color: Colors.white,
+                          size: 18,
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      const Text('Has Uppercase'),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Row(
+                    children: [
+                      Container(
+                        height: 20,
+                        width: 20,
+                        decoration: BoxDecoration(
+                            color: hasLowercase ? Colors.green : Colors.white,
+                            shape: BoxShape.circle,
+                            border: Border.all(
+                                color:
+                                    const Color.fromARGB(255, 189, 189, 189))),
+                        child: const Icon(
+                          Icons.check,
+                          color: Colors.white,
+                          size: 18,
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      const Text('Has LowerCase'),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Row(
+                    children: [
+                      Container(
+                        height: 20,
+                        width: 20,
+                        decoration: BoxDecoration(
+                            color: hasSpecialCharacters
+                                ? Colors.green
+                                : Colors.white,
+                            shape: BoxShape.circle,
+                            border: Border.all(
+                                color:
+                                    const Color.fromARGB(255, 189, 189, 189))),
+                        child: const Icon(
+                          Icons.check,
+                          color: Colors.white,
+                          size: 18,
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      const Text('Has special charecters'),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 30,
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      if (_formKey.currentState!.validate()) {
+                        register();
+                      } else {
+                        showSnackBar(context, 'Form not validated');
+                      }
+                    },
+                    style: ButtonStyle(
+                      backgroundColor: const MaterialStatePropertyAll(BTNgreen),
+                      padding: MaterialStateProperty.all(
+                        const EdgeInsets.all(12),
+                      ),
+                      shape: MaterialStateProperty.all(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
                       ),
                     ),
-                  ],
-                )
-              ],
+                    child: isloading
+                        ? const CircularProgressIndicator(
+                            color: Colors.white,
+                          )
+                        : const Text(
+                            'Register',
+                            style: TextStyle(fontSize: 20, color: Colors.white),
+                          ),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text(
+                        'Already Have An Account?',
+                        style: TextStyle(fontSize: 18),
+                      ),
+                      const SizedBox(
+                        width: 5,
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pushReplacement(
+                            MaterialPageRoute(
+                              builder: (context) => Login(),
+                            ),
+                          );
+                        },
+                        child: const Text(
+                          'Sign In',
+                          style: TextStyle(color: Colors.black, fontSize: 18),
+                        ),
+                      ),
+                    ],
+                  )
+                ],
+              ),
             ),
           ),
         ),

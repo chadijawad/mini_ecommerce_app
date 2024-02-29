@@ -24,6 +24,9 @@ class _LoginState extends State<Login> {
     try {
       final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: emailController.text, password: passwordController.text);
+      if (mounted) {
+        showSnackBar(context, 'Sign in successfully');
+      }
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         // Ensure the widget is still mounted before showing the Snackbar

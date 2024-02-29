@@ -50,6 +50,8 @@ class _RegisterState extends State<Register> {
   }
 
   register() async {
+
+
     setState(() {
       isloading = true;
     });
@@ -328,7 +330,7 @@ class _RegisterState extends State<Register> {
                           )
                         : const Text(
                             'Register',
-                            style: TextStyle(fontSize: 20, color: Colors.white),
+                            style: TextStyle(fontSize: 15, color: Colors.white),
                           ),
                   ),
                   const SizedBox(
@@ -339,7 +341,7 @@ class _RegisterState extends State<Register> {
                     children: [
                       const Text(
                         'Already Have An Account?',
-                        style: TextStyle(fontSize: 18),
+                        style: TextStyle(fontSize: 16),
                       ),
                       const SizedBox(
                         width: 5,

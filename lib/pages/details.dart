@@ -40,7 +40,7 @@ class _DetailsState extends State<Details> {
                 height: 12,
               ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   Container(
                     padding: const EdgeInsets.all(10),
@@ -77,19 +77,22 @@ class _DetailsState extends State<Details> {
                     ],
                   ),
                   const SizedBox(
-                    width: 77,
+                    width:50,
                   ),
-                  const Row(
-                    children: [
-                      Icon(Icons.location_on),
-                      Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Text(
-                          'Flower Shop',
-                          style: TextStyle(fontSize: 15),
+                  Container(
+                    margin: const EdgeInsets.only(right: 10),
+                    child: const Row(
+                      children: [
+                        Icon(Icons.location_on),
+                        Padding(
+                          padding: EdgeInsets.all(2.0),
+                          child: Text(
+                            'Flower Shop',
+                            style: TextStyle(fontSize: 15),
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   )
                 ],
               ),

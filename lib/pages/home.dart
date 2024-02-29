@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:mini_ecommerce_app/classes/items.dart';
 import 'package:mini_ecommerce_app/constant/appbar.dart';
@@ -126,7 +127,9 @@ class _HomeState extends State<Home> {
               ListTile(
                   title: const Text("Logout"),
                   leading: const Icon(Icons.exit_to_app),
-                  onTap: () {}),
+                  onTap: ()async {
+                    await FirebaseAuth.instance.signOut();
+                  }),
               const Spacer(),
               const Padding(
                 padding: EdgeInsets.all(18),

@@ -3,10 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:mini_ecommerce_app/constant/colors.dart';
 import 'package:mini_ecommerce_app/constant/snackbar.dart';
 import 'package:mini_ecommerce_app/constant/textfield.dart';
+import 'package:mini_ecommerce_app/pages/forgot_password.dart';
 import 'package:mini_ecommerce_app/pages/register.dart';
 
 class Login extends StatefulWidget {
-  Login({super.key});
+  const Login({super.key});
 
   @override
   State<Login> createState() => _LoginState();
@@ -62,6 +63,10 @@ class _LoginState extends State<Login> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Regisration'),
+          backgroundColor: appbarGreen,
+        ),
         backgroundColor: const Color.fromARGB(255, 179, 166, 166),
         body: Center(
           child: Padding(
@@ -72,8 +77,9 @@ class _LoginState extends State<Login> {
                 TextField(
                   controller: emailController,
                   decoration: decorationTextfield.copyWith(
-                      hintText: 'Enter your Email',
-                      suffixIcon: const Icon(Icons.email)),
+                    hintText: 'Enter your Email',
+                    suffixIcon: const Icon(Icons.email),
+                  ),
                 ),
                 const SizedBox(
                   height: 33,
@@ -81,16 +87,18 @@ class _LoginState extends State<Login> {
                 TextField(
                   controller: passwordController,
                   decoration: decorationTextfield.copyWith(
-                      hintText: 'Enter your password',
-                      suffixIcon: IconButton(
-                          onPressed: () {
-                            setState(() {
-                              isObscure = !isObscure;
-                            });
-                          },
-                          icon: isObscure
-                              ? const Icon(Icons.visibility)
-                              : const Icon(Icons.visibility_off))),
+                    hintText: 'Enter your password',
+                    suffixIcon: IconButton(
+                      onPressed: () {
+                        setState(() {
+                          isObscure = !isObscure;
+                        });
+                      },
+                      icon: isObscure
+                          ? const Icon(Icons.visibility)
+                          : const Icon(Icons.visibility_off),
+                    ),
+                  ),
                   obscureText: isObscure,
                 ),
                 const SizedBox(
@@ -123,6 +131,20 @@ class _LoginState extends State<Login> {
                 const SizedBox(
                   height: 10,
                 ),
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) =>  ForgotPassword(),
+                      ),
+                    );
+                  },
+                  child: const Text(
+                    'Forgot Password ?',
+                    style: TextStyle(
+                        fontSize: 17, decoration: TextDecoration.underline),
+                  ),
+                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -143,7 +165,8 @@ class _LoginState extends State<Login> {
                       },
                       child: const Text(
                         'Sign Up',
-                        style: TextStyle(color: Colors.black, fontSize: 18),
+                        style: TextStyle(
+                            fontSize: 18, decoration: TextDecoration.underline),
                       ),
                     ),
                   ],

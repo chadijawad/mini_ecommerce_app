@@ -50,8 +50,6 @@ class _RegisterState extends State<Register> {
   }
 
   register() async {
-
-
     setState(() {
       isloading = true;
     });
@@ -99,6 +97,10 @@ class _RegisterState extends State<Register> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Sign Up'),
+          backgroundColor: appbarGreen,
+        ),
         backgroundColor: const Color.fromARGB(255, 179, 166, 166),
         body: Center(
           child: Padding(
@@ -350,13 +352,13 @@ class _RegisterState extends State<Register> {
                         onPressed: () {
                           Navigator.of(context).pushReplacement(
                             MaterialPageRoute(
-                              builder: (context) => Login(),
+                              builder: (context) => const Login(),
                             ),
                           );
                         },
                         child: const Text(
                           'Sign In',
-                          style: TextStyle(color: Colors.black, fontSize: 18),
+                          style: TextStyle( fontSize: 18,decoration: TextDecoration.underline),
                         ),
                       ),
                     ],

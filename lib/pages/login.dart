@@ -68,110 +68,112 @@ class _LoginState extends State<Login> {
           backgroundColor: appbarGreen,
         ),
         backgroundColor: const Color.fromARGB(255, 179, 166, 166),
-        body: Center(
-          child: Padding(
-            padding: const EdgeInsets.all(33.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                TextField(
-                  controller: emailController,
-                  decoration: decorationTextfield.copyWith(
-                    hintText: 'Enter your Email',
-                    suffixIcon: const Icon(Icons.email),
-                  ),
-                ),
-                const SizedBox(
-                  height: 33,
-                ),
-                TextField(
-                  controller: passwordController,
-                  decoration: decorationTextfield.copyWith(
-                    hintText: 'Enter your password',
-                    suffixIcon: IconButton(
-                      onPressed: () {
-                        setState(() {
-                          isObscure = !isObscure;
-                        });
-                      },
-                      icon: isObscure
-                          ? const Icon(Icons.visibility)
-                          : const Icon(Icons.visibility_off),
+        body: SingleChildScrollView(
+          child: Center(
+            child: Padding(
+              padding: const EdgeInsets.all(33.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  TextField(
+                    controller: emailController,
+                    decoration: decorationTextfield.copyWith(
+                      hintText: 'Enter your Email',
+                      suffixIcon: const Icon(Icons.email),
                     ),
                   ),
-                  obscureText: isObscure,
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    signIn();
-
-                    // showSnackBar(context, 'Done');
-                  },
-                  style: ButtonStyle(
-                    backgroundColor: const MaterialStatePropertyAll(BTNgreen),
-                    padding: MaterialStateProperty.all(
-                      const EdgeInsets.all(12),
-                    ),
-                    shape: MaterialStateProperty.all(
-                      RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
+                  const SizedBox(
+                    height: 33,
+                  ),
+                  TextField(
+                    controller: passwordController,
+                    decoration: decorationTextfield.copyWith(
+                      hintText: 'Enter your password',
+                      suffixIcon: IconButton(
+                        onPressed: () {
+                          setState(() {
+                            isObscure = !isObscure;
+                          });
+                        },
+                        icon: isObscure
+                            ? const Icon(Icons.visibility)
+                            : const Icon(Icons.visibility_off),
                       ),
                     ),
+                    obscureText: isObscure,
                   ),
-                  child: isLoading
-                      ? const CircularProgressIndicator()
-                      : const Text(
-                          'Sign in',
-                          style: TextStyle(fontSize: 20, color: Colors.white),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      signIn();
+          
+                      // showSnackBar(context, 'Done');
+                    },
+                    style: ButtonStyle(
+                      backgroundColor: const MaterialStatePropertyAll(BTNgreen),
+                      padding: MaterialStateProperty.all(
+                        const EdgeInsets.all(12),
+                      ),
+                      shape: MaterialStateProperty.all(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
                         ),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) =>  ForgotPassword(),
                       ),
-                    );
-                  },
-                  child: const Text(
-                    'Forgot Password ?',
-                    style: TextStyle(
-                        fontSize: 17, decoration: TextDecoration.underline),
-                  ),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Text(
-                      'Do Not Have An Account?',
-                      style: TextStyle(fontSize: 15),
                     ),
-                    const SizedBox(
-                      width: 1,
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        Navigator.of(context).pushReplacement(
-                          MaterialPageRoute(
-                            builder: (context) => const Register(),
+                    child: isLoading
+                        ? const CircularProgressIndicator()
+                        : const Text(
+                            'Sign in',
+                            style: TextStyle(fontSize: 20, color: Colors.white),
                           ),
-                        );
-                      },
-                      child: const Text(
-                        'Sign Up',
-                        style: TextStyle(
-                            fontSize: 18, decoration: TextDecoration.underline),
-                      ),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => const  ForgotPassword(),
+                        ),
+                      );
+                    },
+                    child: const Text(
+                      'Forgot Password ?',
+                      style: TextStyle(
+                          fontSize: 17, decoration: TextDecoration.underline),
                     ),
-                  ],
-                )
-              ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text(
+                        'Do Not Have An Account?',
+                        style: TextStyle(fontSize: 15),
+                      ),
+                      const SizedBox(
+                        width: 1,
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pushReplacement(
+                            MaterialPageRoute(
+                              builder: (context) => const Register(),
+                            ),
+                          );
+                        },
+                        child: const Text(
+                          'Sign Up',
+                          style: TextStyle(
+                              fontSize: 18, decoration: TextDecoration.underline),
+                        ),
+                      ),
+                    ],
+                  )
+                ],
+              ),
             ),
           ),
         ),

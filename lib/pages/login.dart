@@ -1,10 +1,15 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:mini_ecommerce_app/constant/colors.dart';
 import 'package:mini_ecommerce_app/constant/snackbar.dart';
 import 'package:mini_ecommerce_app/constant/textfield.dart';
 import 'package:mini_ecommerce_app/pages/forgot_password.dart';
 import 'package:mini_ecommerce_app/pages/register.dart';
+import 'package:mini_ecommerce_app/provider/google_sign_in.dart';
+import 'package:provider/provider.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -61,15 +66,16 @@ class _LoginState extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
+    final googleSignInProvider = Provider.of<GoogleSignInProvider>(context);
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Regisration'),
+          title: const Text('Log in'),
           backgroundColor: appbarGreen,
         ),
         backgroundColor: const Color.fromARGB(255, 179, 166, 166),
-        body: SingleChildScrollView(
-          child: Center(
+        body: Center(
+          child: SingleChildScrollView(
             child: Padding(
               padding: const EdgeInsets.all(33.0),
               child: Column(
@@ -108,7 +114,7 @@ class _LoginState extends State<Login> {
                   ElevatedButton(
                     onPressed: () {
                       signIn();
-          
+
                       // showSnackBar(context, 'Done');
                     },
                     style: ButtonStyle(
@@ -136,7 +142,7 @@ class _LoginState extends State<Login> {
                     onPressed: () {
                       Navigator.of(context).push(
                         MaterialPageRoute(
-                          builder: (context) => const  ForgotPassword(),
+                          builder: (context) => const ForgotPassword(),
                         ),
                       );
                     },
@@ -167,11 +173,56 @@ class _LoginState extends State<Login> {
                         child: const Text(
                           'Sign Up',
                           style: TextStyle(
-                              fontSize: 18, decoration: TextDecoration.underline),
+                              fontSize: 18,
+                              decoration: TextDecoration.underline),
                         ),
                       ),
                     ],
-                  )
+                  ),
+                  const SizedBox(
+                    height: 33,
+                  ),
+                  const SizedBox(
+                    width: 299,
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Divider(
+                            thickness: 0.6,
+                            color: Colors.black,
+                          ),
+                        ),
+                        Text(
+                          'Or',
+                          style: TextStyle(color: Colors.black),
+                        ),
+                        Expanded(
+                          child: Divider(
+                            thickness: 0.6,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    margin: const EdgeInsets.symmetric(vertical: 27),
+                    child: GestureDetector(
+                      onTap: () {
+                        googleSignInProvider.googlelogin();
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.all(13),
+                        decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            border: Border.all(width: 1)),
+                        child: SvgPicture.asset(
+                          "assets/google-plus.svg",
+                          height: 27,
+                        ),
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),

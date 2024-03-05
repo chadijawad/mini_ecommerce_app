@@ -1,11 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:mini_ecommerce_app/classes/items.dart';
 import 'package:mini_ecommerce_app/constant/appbar.dart';
 import 'package:mini_ecommerce_app/constant/colors.dart';
 import 'package:mini_ecommerce_app/pages/checkout.dart';
 import 'package:mini_ecommerce_app/pages/details.dart';
 import 'package:mini_ecommerce_app/provider/cart.dart';
+import 'package:mini_ecommerce_app/provider/google_sign_in.dart';
 import 'package:provider/provider.dart';
 
 class Home extends StatefulWidget {
@@ -19,6 +21,8 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     final cart = Provider.of<Cart>(context);
+    final googleSingIn = Provider.of<GoogleSignInProvider>(context);
+    final user = FirebaseAuth.instance.currentUser!;
     return SafeArea(
       child: Scaffold(
         body: Padding(
@@ -81,9 +85,9 @@ class _HomeState extends State<Home> {
         drawer: Drawer(
           child: Column(
             children: [
-              const UserAccountsDrawerHeader(
+               UserAccountsDrawerHeader(
                 // currentAccountPictureSize: Size.square(50),
-                decoration: BoxDecoration(
+                decoration:const  BoxDecoration(
                   image: DecorationImage(
                     image: AssetImage(
                       'assets/backgroundmod.jpg',
@@ -93,12 +97,12 @@ class _HomeState extends State<Home> {
                 ),
                 currentAccountPicture: CircleAvatar(
                   radius: 100,
-                  backgroundImage: AssetImage(
-                      'assets/pngtree-user-icon-png-image_1796659.jpg'),
+                  backgroundImage: NetworkImage(
+                      user.photoURL!),
                 ),
 
-                accountName: Text('Chadi Jawad'),
-                accountEmail: Text('chadi@gmail.com'),
+                accountName: Text(user.displayName!),
+                accountEmail: Text(user.email!),
               ),
               ListTile(
                   title: const Text("Home"),
@@ -127,8 +131,9 @@ class _HomeState extends State<Home> {
               ListTile(
                   title: const Text("Logout"),
                   leading: const Icon(Icons.exit_to_app),
-                  onTap: ()async {
+                  onTap: () async {
                     await FirebaseAuth.instance.signOut();
+                    await googleSingIn.signOutGoogle();
                   }),
               const Spacer(),
               const Padding(

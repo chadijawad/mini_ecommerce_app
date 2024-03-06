@@ -24,10 +24,10 @@ class _VerifyEmailPageState extends State<VerifyEmailPage> {
     isEmailVerified = FirebaseAuth.instance.currentUser!.emailVerified;
 
     if (!isEmailVerified) {
-      sendVerificationEmail();
+      // sendVerificationEmail();
 
       timer = Timer.periodic(const Duration(seconds: 3), (timer) async {
-        // when we click on the link that existed on gmail
+        // when we click on the link that existed on yahoo
         await FirebaseAuth.instance.currentUser!.reload();
 
         // is email verified or not (clicked on the link or not) (true or false)
@@ -44,7 +44,7 @@ class _VerifyEmailPageState extends State<VerifyEmailPage> {
 
   sendVerificationEmail() async {
     try {
-      await FirebaseAuth.instance.currentUser!.sendEmailVerification();
+      // await FirebaseAuth.instance.currentUser!.sendEmailVerification();
       setState(() {
         canResendEmail = false;
       });
@@ -113,7 +113,7 @@ class _VerifyEmailPageState extends State<VerifyEmailPage> {
                       FirebaseAuth.instance.signOut();
                     },
                     style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(Colors.grey[800]),
+                      backgroundColor: MaterialStateProperty.all(Colors.grey[100]),
                       padding:
                           MaterialStateProperty.all(const EdgeInsets.all(12)),
                       shape: MaterialStateProperty.all(RoundedRectangleBorder(

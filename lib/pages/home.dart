@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:mini_ecommerce_app/classes/items.dart';
@@ -6,6 +7,7 @@ import 'package:mini_ecommerce_app/constant/appbar.dart';
 import 'package:mini_ecommerce_app/constant/colors.dart';
 import 'package:mini_ecommerce_app/pages/checkout.dart';
 import 'package:mini_ecommerce_app/pages/details.dart';
+import 'package:mini_ecommerce_app/pages/profile.dart';
 import 'package:mini_ecommerce_app/provider/cart.dart';
 import 'package:mini_ecommerce_app/provider/google_sign_in.dart';
 import 'package:provider/provider.dart';
@@ -85,9 +87,9 @@ class _HomeState extends State<Home> {
         drawer: Drawer(
           child: Column(
             children: [
-               UserAccountsDrawerHeader(
+              const UserAccountsDrawerHeader(
                 // currentAccountPictureSize: Size.square(50),
-                decoration:const  BoxDecoration(
+                decoration: BoxDecoration(
                   image: DecorationImage(
                     image: AssetImage(
                       'assets/backgroundmod.jpg',
@@ -97,12 +99,11 @@ class _HomeState extends State<Home> {
                 ),
                 currentAccountPicture: CircleAvatar(
                   radius: 100,
-                  backgroundImage: NetworkImage(
-                      user.photoURL!),
+                  // backgroundImage: NetworkImage(user.photoURL!),
                 ),
 
-                accountName: Text(user.displayName!),
-                accountEmail: Text(user.email!),
+                accountName: Text('data'),
+                accountEmail: Text('data'),
               ),
               ListTile(
                   title: const Text("Home"),
@@ -129,11 +130,27 @@ class _HomeState extends State<Home> {
                   leading: const Icon(Icons.help_center),
                   onTap: () {}),
               ListTile(
+                  title: const Text("My profile"),
+                  leading: const Icon(Icons.person),
+                  onTap: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => const ProfilePage(),
+                    ));
+                  }),
+              ListTile(
                   title: const Text("Logout"),
                   leading: const Icon(Icons.exit_to_app),
                   onTap: () async {
-                    await FirebaseAuth.instance.signOut();
-                    await googleSingIn.signOutGoogle();
+                    try {
+                      await FirebaseAuth.instance.signOut();
+                      await googleSingIn.signOutGoogle();
+                      // Optionally, navigate to the login screen or perform any other actions after logout
+                    } catch (e) {
+                      if (kDebugMode) {
+                        print('Error during logout: $e');
+                      }
+                      // Handle the error appropriately, such as displaying an error message to the user
+                    }
                   }),
               const Spacer(),
               const Padding(

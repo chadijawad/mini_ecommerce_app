@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:mini_ecommerce_app/constant/colors.dart';
@@ -16,6 +17,8 @@ class _RegisterState extends State<Register> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final usernameController = TextEditingController();
+  final titleController = TextEditingController();
+  final ageController = TextEditingController();
   bool isloading = false;
   final _formKey = GlobalKey<FormState>();
   bool isObscure = true;
@@ -60,11 +63,24 @@ class _RegisterState extends State<Register> {
         email: emailController.text,
         password: passwordController.text,
       );
+      CollectionReference users =
+          FirebaseFirestore.instance.collection('users');
+      users
+          .doc(credential.user!.uid)
+          .set({
+            'username': usernameController.text,
+            'age': ageController.text.toString(),
+            'title': titleController.text,
+            'email': emailController.text
+          })
+          .then((value) => print("User Added"))
+          .catchError((error) => print("Failed to add user: $error"));
+
       if (!mounted) return;
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) => Login(),
+          builder: (context) => const Login(),
         ),
       );
       // showSnackBar(context, 'Registration successful!');
@@ -90,6 +106,9 @@ class _RegisterState extends State<Register> {
   void dispose() {
     emailController.dispose();
     passwordController.dispose();
+    titleController.dispose();
+    ageController.dispose();
+    usernameController.dispose();
     super.dispose();
   }
 
@@ -118,6 +137,24 @@ class _RegisterState extends State<Register> {
                           decoration: decorationTextfield.copyWith(
                               hintText: 'Enter your username',
                               suffixIcon: const Icon(Icons.account_box_sharp)),
+                          keyboardType: TextInputType.text,
+                        ),
+                        const SizedBox(height: 33),
+                        TextFormField(
+                          controller: ageController,
+                          decoration: decorationTextfield.copyWith(
+                            hintText: 'Enter your age',
+                            suffixIcon: const Icon(Icons.view_agenda_rounded),
+                          ),
+                          keyboardType: TextInputType.number,
+                        ),
+                        const SizedBox(height: 33),
+                        TextFormField(
+                          controller: titleController,
+                          decoration: decorationTextfield.copyWith(
+                            hintText: 'Enter your title',
+                            suffixIcon: const Icon(Icons.title),
+                          ),
                           keyboardType: TextInputType.text,
                         ),
                         const SizedBox(
@@ -358,7 +395,9 @@ class _RegisterState extends State<Register> {
                         },
                         child: const Text(
                           'Sign In',
-                          style: TextStyle( fontSize: 18,decoration: TextDecoration.underline),
+                          style: TextStyle(
+                              fontSize: 18,
+                              decoration: TextDecoration.underline),
                         ),
                       ),
                     ],

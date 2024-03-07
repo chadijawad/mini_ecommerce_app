@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:mini_ecommerce_app/constant/snackbar.dart';
 import 'package:mini_ecommerce_app/firebase_options.dart';
+import 'package:mini_ecommerce_app/pages/home.dart';
 import 'package:mini_ecommerce_app/pages/login.dart';
 import 'package:mini_ecommerce_app/pages/verify_email.dart';
 import 'package:mini_ecommerce_app/provider/cart.dart';
@@ -44,7 +45,8 @@ class MyApp extends StatelessWidget {
               } else if (snapshot.hasError) {
                 return showSnackBar(context, "Something went wrong");
               } else if (snapshot.hasData) {
-                return const VerifyEmailPage();
+                // return const VerifyEmailPage();
+                return const Home();
               } else {
                 return const Login();
               }

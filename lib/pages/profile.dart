@@ -1,6 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:mini_ecommerce_app/constant/colors.dart';
+import 'package:mini_ecommerce_app/constant/get_data_from_firestore.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -10,6 +13,7 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfileState extends State<ProfilePage> {
+  final cridential = FirebaseAuth.instance.currentUser;
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -34,57 +38,62 @@ class _ProfileState extends State<ProfilePage> {
         ),
         body: Padding(
           padding: const EdgeInsets.all(20.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Center(
-                child: Container(
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Center(
+                  child: Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                        color: Colors.green[300],
+                        borderRadius: BorderRadius.circular(6)),
+                    child: const Text(
+                      'Info from firebase auth',
+                      style: TextStyle(fontSize: 20),
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                Text(
+                  'Email : ${cridential!.email}',
+                  style: const TextStyle(fontSize: 20),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                Text(
+                  'Created date : ${DateFormat('MMMM d,y').format(cridential!.metadata.creationTime!)}',
+                  style: const TextStyle(fontSize: 20),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                Text(
+                  'Last Sign in : ${DateFormat('MMMM d,y').format(cridential!.metadata.lastSignInTime!)}',
+                  style: const TextStyle(fontSize: 20),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                Center(
+                  child: Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
                       color: Colors.green[300],
-                      borderRadius: BorderRadius.circular(6)),
-                  child: const Text(
-                    'Info from firebase auth',
-                    style: TextStyle(fontSize: 20),
+                      borderRadius: BorderRadius.circular(6),
+                    ),
+                    child: const Text(
+                      'Info from firebase firestore',
+                      style: TextStyle(fontSize: 20),
+                    ),
                   ),
                 ),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              const Text(
-                'Email :',
-                style: TextStyle(fontSize: 20),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              const Text(
-                'Created date :',
-                style: TextStyle(fontSize: 20),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              const Text(
-                'Last Sign in :',
-                style: TextStyle(fontSize: 20),
-              ),
-              const SizedBox(height: 20,),
-              Center(
-                child: Container(
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    color: Colors.green[300],
-                    borderRadius: BorderRadius.circular(6),
-                  ),
-                  child: const Text(
-                    'Info from firebase firestore',
-                    style: TextStyle(fontSize: 20),
-                  ),
-                ),
-              )
-            ],
+                GetDataFromFirestore(documentId: cridential!.uid)
+              ],
+            ),
           ),
         ),
       ),
